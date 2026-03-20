@@ -2,24 +2,28 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
+const valoresCorrectos = {
+  Atletismo: 1,
+  Futsal: 2,
+  Volley: 3,
+  Basketball: 4,
+  Handball: 5,
+  Ciclismo: 15,
+  Natacion: 20,
+  Tenis: 25,
+  Golf: 60,
+  Equitacion: 120
+};
+
 // GET /api/items
-// GET /api/items?orden=asc
-// GET /api/items?orden=desc
-router.get('/', async (req, res) => {
+router.get('/', async (req, res) =>{
   try {
-    const { orden } = req.query;
+    const result = await pool.query(
+      'SELECT * FROM deportes ORDER BY valor ASC'
+    );
 
-    let query = 'SELECT * FROM deportes ORDER BY posicion ASC';
-
-    if (orden === 'asc') {
-      query = 'SELECT * FROM deportes ORDER BY valor ASC';
-    } else if (orden === 'desc') {
-      query = 'SELECT * FROM deportes ORDER BY valor DESC';
-    }
-
-    const result = await pool.query(query);
     return res.json(result.rows);
-  } catch (error) {
+  } catch (error){
     console.error('Error al obtener datos:', error.message);
     return res.status(500).json({ error: 'Error al obtener datos' });
   }
@@ -27,7 +31,7 @@ router.get('/', async (req, res) => {
 
 // GET /api/items/existe/:item
 router.get('/existe/:item', async (req, res) => {
-  try {
+  try{
     const { item } = req.params;
 
     const result = await pool.query(
@@ -39,7 +43,7 @@ router.get('/existe/:item', async (req, res) => {
       existe: result.rows.length > 0,
       datos: result.rows[0] || null
     });
-  } catch (error) {
+  } catch (error){
     console.error('Error al verificar existencia:', error.message);
     return res.status(500).json({ error: 'Error al verificar existencia' });
   }
@@ -49,59 +53,47 @@ router.get('/existe/:item', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const item = req.body.item?.trim();
-    const posicion = Number(req.body.posicion);
     const valor = Number(req.body.valor);
 
-    if (!item || Number.isNaN(posicion) || Number.isNaN(valor)) {
+    if (!item || Number.isNaN(valor)){
       return res.status(400).json({ error: 'Faltan datos o son inválidos' });
     }
 
-    if (posicion < 1 || posicion > 10) {
-      return res.status(400).json({ error: 'La posición debe estar entre 1 y 10' });
-    }
-
-    if (valor <= 0) {
+    if (valor <= 0){
       return res.status(400).json({ error: 'El valor debe ser mayor que 0' });
     }
 
-    // verificar límite de 10 items
-    const countResult = await pool.query('SELECT COUNT(*) FROM deportes');
-    const total = Number(countResult.rows[0].count);
-
-    if (total >= 10) {
-      return res.status(400).json({ error: 'Solo se permiten 10 items' });
+    if (!(item in valoresCorrectos)){
+      return res.status(400).json({
+        error: 'Ese deporte no está en la lista definida'
+      });
     }
 
-    // verificar si ya existe el item
     const itemExistente = await pool.query(
       'SELECT * FROM deportes WHERE LOWER(item) = LOWER($1)',
       [item]
     );
 
     if (itemExistente.rows.length > 0) {
-      return res.status(409).json({ error: 'Ese item ya existe' });
+      return res.status(409).json({ error: 'Ese deporte ya existe en la lista' });
     }
 
-    // verificar si ya existe la posición
-    const posicionExistente = await pool.query(
-      'SELECT * FROM deportes WHERE posicion = $1',
-      [posicion]
-    );
-
-    if (posicionExistente.rows.length > 0) {
-      return res.status(409).json({ error: 'Esa posición ya está ocupada' });
+    if (valor !== valoresCorrectos[item]) {
+      return res.status(400).json({
+        error: `El valor correcto para ${item} es ${valoresCorrectos[item]}`
+      });
     }
 
     const result = await pool.query(
-      'INSERT INTO deportes (item, posicion, valor) VALUES ($1, $2, $3) RETURNING *',
-      [item, posicion, valor]
+      'INSERT INTO deportes (item, valor) VALUES ($1, $2) RETURNING *',
+      [item, valor]
     );
 
     return res.status(201).json({
       mensaje: 'Ítem registrado correctamente',
       datos: result.rows[0]
     });
-  } catch (error) {
+  } catch (error){
     console.error('Error al registrar ítem:', error.message);
     return res.status(500).json({ error: 'Error al registrar ítem' });
   }
