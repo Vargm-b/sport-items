@@ -30,7 +30,7 @@ body {
   background:
     radial-gradient(circle at top left, rgba(246, 218, 166, 0.55), transparent 26%),
     radial-gradient(circle at top right, rgba(241, 171, 134, 0.28), transparent 24%),
-    linear-gradient(180deg, #fbf8f3 0%, #f4efe8 100%);
+    linear-gradient(180deg, #e8dfd4 0%, #ddd3c5 100%);
   min-height: 100vh;
   line-height: 1.5;
 }
@@ -149,7 +149,7 @@ body {
   margin-bottom: 18px;
 }
 
-.bloqueado {
+.bloqueado{
   filter: grayscale(0.3);
   user-select: none;
   pointer-events: none;
@@ -200,7 +200,7 @@ label {
 
 
 input,
-select {
+select{
   width: 100%;
   min-height: 50px;
   padding: 13px 15px;
@@ -236,7 +236,7 @@ button:disabled {
 }
 
 
-button {
+button{
   border: none;
   min-height: 50px;
   padding: 13px 18px;
@@ -255,7 +255,7 @@ button {
   white-space: nowrap;
 }
 
-button:hover {
+button:hover{
   transform: translateY(-1px);
   box-shadow: 0 16px 28px rgba(197, 123, 87, 0.28);
 }
@@ -302,7 +302,7 @@ button:disabled {
   overflow-x: auto;
   border-radius: 20px;
   border: 1px solid var(--line);
-  background: linear-gradient(180deg, #fffdfa 0%, #fffaf3 100%);
+  background: linear-gradient(180deg, #e2e4e6 0%, #d4d7da 100%);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
@@ -331,7 +331,7 @@ th {
 }
 
 tbody tr {
-  background: rgba(255, 255, 255, 0.92);
+  background:linear-gradient(180deg, #e2e4e6 0%, #d4d7da 100%);
   transition: background 0.18s ease;
 }
 
