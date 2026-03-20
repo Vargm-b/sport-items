@@ -6,7 +6,7 @@ const pool = new Pool({
   database: 'sport_items',
   password: 'sport',
   port: 5432,
-  connectionTimeoutMillis: 3000
+  connectionTimeoutMillis: 3000,
 });
 
 module.exports = pool;
