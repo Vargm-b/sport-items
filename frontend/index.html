@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registro de Items</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="layout">
+    <header class="hero">
+      <h1>Registro de Items</h1>
+      <p>Permite registrar el elemento base y los demás items según su valor relativo.</p>
+    </header>
+
+    <section class="panel" id="panel-base">
+      <h2>1. Registrar elemento base</h2>
+      <p>Debe registrarse primero para habilitar el resto del sistema.</p>
+      <form id="formBase" class="formulario">
+        <div class="campo">
+          <label for="baseItem">Item</label>
+          <input type="text" id="baseItem" value="Atletismo" readonly>
+        </div>
+        <div class="campo">
+          <label for="baseValor">Valor</label>
+          <input type="number" id="baseValor" value="1" readonly>
+        </div>
+        <button type="submit" id="btnRegistrarBase">Registrar elemento base</button>
+      </form>
+      <p id="mensajeBase" class="mensaje"></p>
+    </section>
+
+    <section class="panel" id="panel-registro">
+      <h2>2. Registrar item</h2>
+      <p>Seleccione un deporte e ingrese el valor correspondiente. La posición se asigna automáticamente.</p>
+      <form id="formRegistro" class="formulario" autocomplete="off">
+        <div class="campo">
+          <label for="item">Item</label>
+          <select id="item" required>
+            <option value="">Seleccione un item</option>
+            <option value="Futsal">Futsal</option>
+            <option value="Volley">Volley</option>
+            <option value="Basketball">Basketball</option>
+            <option value="Handball">Handball</option>
+            <option value="Ciclismo">Ciclismo</option>
+            <option value="Natacion">Natacion</option>
+            <option value="Tenis">Tenis</option>
+            <option value="Golf">Golf</option>
+            <option value="Equitacion">Equitacion</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="valor">Valor</label>
+          <input type="number" id="valor" placeholder="Ingrese el valor correcto" required>
+        </div>
+        <button type="submit" id="btnRegistrar">Registrar item</button>
+      </form>
+      <p id="mensajeRegistro" class="mensaje"></p>
+    </section>
+
+    <section class="panel" id="panel-verificar">
+      <h2>3. Verificar existencia</h2>
+      <p>Compruebe si un item ya fue registrado.</p>
+      <form id="formVerificar" class="formulario">
+        <div class="campo">
+          <label for="buscarItem">Item</label>
+          <input type="text" id="buscarItem" placeholder="Ingrese el nombre del item" required>
+        </div>
+        <button type="submit" id="btnVerificar">Verificar</button>
+      </form>
+      <p id="resultadoVerificacion" class="mensaje"></p>
+    </section>
+
+    <section class="panel" id="panel-lista">
+      <h2>4. Mostrar lista registrada</h2>
+      <p>La lista se mostrará ordenada por valor.</p>
+      <button type="button" id="btnMostrarLista">Mostrar lista</button>
+      <div class="tabla-wrapper" id="contenedorTabla">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Posición</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody id="tablaDeportes"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
